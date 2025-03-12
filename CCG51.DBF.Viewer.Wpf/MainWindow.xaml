@@ -1,0 +1,74 @@
+﻿<Window x:Class="CCG51.DBF.Viewer.Wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CCG51.DBF.Viewer.Wpf"
+        xmlns:vm="clr-namespace:CCG51.DBF.Viewer.Wpf.ViewModels"
+        mc:Ignorable="d"
+        FontSize="17"
+        Title="DBFViewer"
+        WindowStartupLocation="CenterScreen"
+        Height="700"
+        Width="1300">
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="0"
+                    Margin="8">
+            <Button  Margin="8 0"
+                     Width="240"
+                     Command="{Binding BrowseCommand}"
+                     Content="DBFファイルを選択"/>
+            <Button Margin="8 0"
+                    Width="120"
+                    Command="{Binding ClearCommand}"
+                    Foreground="Red"
+                    Content="クリア"/>
+            <TextBlock Margin="8 0"
+                       Text="{Binding ElementName=ListBox,Path=SelectedItem.IsLimit.DisplayValue}"/>
+        </StackPanel>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="160"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <ListBox x:Name="ListBox"
+                     Margin="8 8 0 8"
+                     Grid.Column="0"
+                     ItemsSource="{Binding TabItems}"
+                     SelectionMode="Single">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding File.ShortName}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+            <DataGrid AutoGenerateColumns="True"
+                      Grid.Column="1"
+                      ItemsSource="{Binding ElementName=ListBox,Path=SelectedItem.DataTable}"
+                      ScrollViewer.CanContentScroll="True"
+                      EnableColumnVirtualization="True"
+                      IsReadOnly="True"
+                      Margin="8"/>
+        </Grid>
+        <StatusBar Grid.Row="2">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="選択されたファイル:"/>
+                <TextBlock Text="{Binding ElementName=ListBox,Path=SelectedItem.File.ShortName}"/>
+            </StackPanel>
+        </StatusBar>
+    </Grid>
+</Window>
