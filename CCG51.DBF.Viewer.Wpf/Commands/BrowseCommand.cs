@@ -51,7 +51,7 @@ public sealed class BrowseCommand : ICommand
     private DataTable GenerateDataTable(string[] headers, IReadOnlyCollection<Dictionary<string, string?>> data, ref bool isLimit, int maxSize = int.MaxValue)
     {
         var table = new DataTable();
-        var counter = 0;
+        var counter = 1;
         // 動的カラム追加
         foreach (var header in headers)
         {
